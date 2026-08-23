@@ -1,4 +1,8 @@
-import { ConflictException, Injectable, InternalServerErrorException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Auth } from 'src/schema/auth.schema';
@@ -41,4 +45,9 @@ export class AuthService {
       );
     }
   }
+
+  async getTenantById(tenantId: string) {
+    return this.AuthModel.findOne({ id: tenantId });
+  }
 }
+  

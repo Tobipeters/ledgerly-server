@@ -1,5 +1,4 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
 import { Product } from './product.schema';
 import { Model } from 'mongoose';
 import { ProductDto } from './dto/product.dto';
