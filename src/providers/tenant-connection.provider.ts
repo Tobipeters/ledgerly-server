@@ -13,5 +13,5 @@ export const TenantConnectionProvider = {
     }
     return connection.useDb(`tenant_${request.tenantId}`);
   },
-  inject: [REQUEST, getConnectionToken()],
+  inject: [REQUEST, getConnectionToken()], // This provider depends on Request & the db connection
 };
