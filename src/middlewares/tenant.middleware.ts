@@ -17,9 +17,8 @@ export class TenantMiddleware implements NestMiddleware {
       throw new BadRequestException('X-TENANT-ID not provideed');
     }
 
-    // Check if tenant existing.
+    // Check if tenant existing in the db.
     const existingTenant = await this.authService.getTenantById(tenantId);
-    console.log({ existingTenant });
     if (!existingTenant) {
       throw new NotFoundException('Tenant does not exist');
     }
