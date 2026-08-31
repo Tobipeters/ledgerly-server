@@ -39,7 +39,6 @@ export class Auth {
 
   @Prop({
     required: true,
-    select: false,
   })
   password!: string;
 }
