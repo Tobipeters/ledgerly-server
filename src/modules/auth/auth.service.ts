@@ -16,6 +16,8 @@ import { JwtService } from '@nestjs/jwt';
 import { RefreshToken } from 'src/schema/refresh-token.schema';
 import { v4 as uuidv4 } from 'uuid';
 import { ChangePasswordDto } from './dto/change-password.dto';
+import { ResetPasswordToken } from 'src/schema/reset-password.schema';
+import { nanoid } from 'nanoid';
 
 @Injectable()
 export class AuthService {
@@ -24,6 +26,8 @@ export class AuthService {
     @InjectModel(Auth.name) private AuthModel: Model<Auth>,
     @InjectModel(RefreshToken.name)
     private RefreshTokenModel: Model<RefreshToken>,
+    @InjectModel(ResetPasswordToken.name)
+    private ResetPasswordTokenModel: Model<ResetPasswordToken>,
     private jwtService: JwtService,
   ) {}
 
@@ -90,7 +94,7 @@ export class AuthService {
 
   async storeRefreshToken(token: string, userId: string) {
     const expiryDate = new Date();
-    expiryDate.setDate(expiryDate.getDate() + 3); //expires in 3 days
+    expiryDate.setDate(expiryDate.getHours() + 1); //expires in 1 hour
 
     await this.RefreshTokenModel.updateOne(
       { userId },
@@ -151,6 +155,28 @@ export class AuthService {
     userDetails.save();
     return {
       message: 'Password changed successfully',
+    };
+  }
+
+  async forgetPassword(email: string) {
+    const user = await this.AuthModel.findOne({ email });
+    const expiryDate = new Date();
+    expiryDate.setDate(expiryDate.getMinutes() + 5); //expires in 5 minutes
+
+    if (user) {
+      // Generate reset token
+      await this.ResetPasswordTokenModel.create({
+        userId: user._id,
+        token: nanoid(),
+        expiryDate,
+      });
+
+      // Send reset password link to email 
+      
+    }
+
+    return {
+      message: 'A reset password link has been sent to this email, if it exist',
     };
   }
 }
